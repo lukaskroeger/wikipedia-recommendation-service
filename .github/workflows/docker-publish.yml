@@ -102,7 +102,7 @@ jobs:
         echo ${{secrets.SSH_PRIVATE_KEY}} > ~/.ssh/private.key
         sudo chmod 400 ~/.ssh/private.key
         echo ${{secrets.SSH_KNOWN_HOSTS}} > ~/.ssh/known_hosts
-        ls ~/.ssh
+        ls -l ~/.ssh
         cat ~/.ssh/known_hosts
 
     - name: Connect SSH
