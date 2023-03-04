@@ -94,7 +94,7 @@ jobs:
   
   deploy:
     runs-on: ubuntu-latest
-    #needs: publish
+    needs: publish
     steps:
     - name: Create SSH key
       run: |
