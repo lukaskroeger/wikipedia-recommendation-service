@@ -104,5 +104,5 @@ jobs:
         echo "${{secrets.KNOWN_HOSTS}}" > ~/.ssh/known_hosts
 
     - name: Start Container
-      run: ssh -i ~/.ssh/private.key ${{secrets.SSH_USER}}@${{secrets.SERVER}} 'docker-compose pull; docker-compose up -d'
+      run: ssh -i ~/.ssh/private.key ${{secrets.SSH_USER}}@${{secrets.SERVER}} 'docker compose pull; docker compose up -d'
 
