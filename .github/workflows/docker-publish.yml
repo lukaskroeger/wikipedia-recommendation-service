@@ -101,9 +101,10 @@ jobs:
         mkdir -p ~/.ssh/
         echo ${{secrets.SSH_PRIVATE_KEY}} > ~/.ssh/private.key
         sudo chmod 400 ~/.ssh/private.key
-        echo ${{secrets.SSH_KNOWN_HOSTS}} > ~/.ssh/known_hosts     
+        echo ${{secrets.SSH_KNOWN_HOSTS}} > ~/.ssh/known_hosts
 
     - name: Connect SSH
+      run: cat ~/.ssh/known_hosts
       run: ssh -i ~/.ssh/private.key ${{secrets.SSH_USER}}@${{secrets.SERVER}}
 
     - name: Start Container
