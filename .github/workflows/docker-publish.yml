@@ -99,16 +99,15 @@ jobs:
     - name: Create SSH key
       run: |
         mkdir -p ~/.ssh/
-        echo "$SSH_PRIVATE_KEY" > ../private.key
-        sudo chmod 400 ../private.key
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/private.key
+        sudo chmod 400 ~/.ssh/private.key
         echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
       env:
         SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
         SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
-        SSH_KEY_PATH: ${{ github.workspace }}/../private.key
 
     - name: Connect SSH
-      run: ssh -i $SSH_KEY_PATH ${{secrets.SSH_USER}}@${{secrets.SERVER}}
+      run: ssh -i ~/.ssh/private.key ${{secrets.SSH_USER}}@${{secrets.SERVER}}
 
     - name: Start Container
       run: |
