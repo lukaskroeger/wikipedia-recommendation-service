@@ -99,11 +99,9 @@ jobs:
     - name: Create SSH key
       run: |
         mkdir -p ~/.ssh/
-        echo ${{secrets.SSH_PRIVATE_KEY}} > ~/.ssh/private.key
+        echo ${{secrets.SERVER_SSH_KEY}} > ~/.ssh/private.key
         sudo chmod 400 ~/.ssh/private.key
-        echo ${{secrets.SSH_KNOWN_HOSTS}} > ~/.ssh/known_hosts
-        ls -l ~/.ssh
-        cat ~/.ssh/known_hosts
+        echo ${{secrets.KNOWN_HOSTS}} > ~/.ssh/known_hosts
 
     - name: Connect SSH
       run: ssh -i ~/.ssh/private.key ${{secrets.SSH_USER}}@${{secrets.SERVER}}
