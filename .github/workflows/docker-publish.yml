@@ -19,8 +19,7 @@ env:
 
 
 jobs:
-  build:
-
+  publish:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -92,3 +91,18 @@ jobs:
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
         run: echo "${{ steps.meta.outputs.tags }}" | xargs -I {} cosign sign {}@${{ steps.build-and-push.outputs.digest }}
+  
+  deploy:
+    runs-on: ubuntu-latest
+    #needs: publish
+    steps:
+    - name: Create SSH key
+      run: |
+        mkdir -p ~/.ssh/
+        echo "${{secrets.SERVER_SSH_KEY}}" > ~/.ssh/private.key
+        sudo chmod 400 ~/.ssh/private.key
+        echo "${{secrets.KNOWN_HOSTS}}" > ~/.ssh/known_hosts
+
+    - name: Start Container
+      run: ssh -i ~/.ssh/private.key ${{secrets.SSH_USER}}@${{secrets.SERVER}} 'cd wikipedia-recommendation-service; docker compose pull; docker compose up -d'
+
