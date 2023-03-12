@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.Extensions;
 using WikipediaRecomendationApi.Models.Wikipedia;
 using System.Text.Json;
+using WikipediaRecomendationApi.Models;
 
 namespace WikipediaRecomendationApi.Services;
 
@@ -18,13 +19,13 @@ public class WikipediaService : IWikipediaService
         _configuration = config;
         _httpClient = httpClient;
         _logger = logger;
-        _httpClient.BaseAddress = new Uri(_configuration["Wikipedia:ApiBaseUrl"]);
     }
 
-    public async Task<IEnumerable<string>> GetSeeAlsoLinks(string pageTilte)
+    public async Task<IEnumerable<string>> GetSeeAlsoLinks(string pageTilte, SupportedLanguage language)
     {
+        _httpClient.BaseAddress = new Uri($"https://{language}.{_configuration["Wikipedia:ApiBaseUrl"]}");
         Parse? pageParse = await GetPageParse(pageTilte);
-        Section? seeAlsoSection = pageParse?.Sections?.FirstOrDefault(x => x.Title == "See also");
+        Section? seeAlsoSection = pageParse?.Sections?.FirstOrDefault(x => x.Title == _configuration[$"Wikipedia:SeeAlsoSectionNames:{language}"]);
         if (seeAlsoSection is null)
         {
             return Enumerable.Empty<string>();

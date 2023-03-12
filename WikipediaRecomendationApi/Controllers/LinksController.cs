@@ -18,9 +18,15 @@ public class LinksController : ControllerBase
     }
 
     [HttpGet("seealso/{pageTitle}")]
-    public async Task<ActionResult<IEnumerable<RelatedArticle>>> GetDependingOnSeeAlso(string pageTitle)
+    public async Task<ActionResult<IEnumerable<RelatedArticle>>> GetDependingOnSeeAlso(string pageTitle, [FromQuery] string? language = null)
     {
-        IEnumerable<RelatedArticle> result = (await _wikipediaService.GetSeeAlsoLinks(pageTitle)).Select(x => new RelatedArticle() { Title = x });
-        return Ok(result);
+        var selectedLanguage = SupportedLanguage.en;
+        if (language is null || Enum.TryParse(language, out selectedLanguage))
+        {
+            IEnumerable<RelatedArticle> result = (await _wikipediaService.GetSeeAlsoLinks(pageTitle, selectedLanguage)).Select(x => new RelatedArticle() { Title = x });
+            return Ok(result);
+
+        }
+        return BadRequest($"Wrong query paramerter. Please specify one of the following languages: {string.Join(',', Enum.GetValues<SupportedLanguage>())}");
     }
 }
