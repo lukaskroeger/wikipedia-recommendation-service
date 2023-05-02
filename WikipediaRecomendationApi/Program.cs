@@ -9,6 +9,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient<IWikipediaService, WikipediaService>();
+builder.Services.AddHttpClient<OpenAIService>();
 
 WebApplication app = builder.Build();
 
